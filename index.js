@@ -2,7 +2,6 @@
 
 const Log = require('log4js_wrapper')
 const logger = Log.getLogger()
-const querystring = require('querystring')
 
 module.exports = function responseWrapper() {
     return async function (ctx, next) {
@@ -17,7 +16,8 @@ module.exports = function responseWrapper() {
             ctx.body = JSON.stringify({
                 status:"error",
                 message:{
-                    content: String(error),
+                    content: "unexpected error",
+                    additional:String(error),
                     displayAs:"modal"
                 }
             });
