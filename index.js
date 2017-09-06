@@ -13,14 +13,18 @@ module.exports = function responseWrapper() {
                 ctx.body = {status: 'ok',data:ctx.body}
             logger.info('%s %s - %s ms', ctx.method,ctx.originalUrl, ms)
         } catch (error) {
-            ctx.body = JSON.stringify({
+            let error_object = {
                 status:"error",
                 message:{
-                    content: "unexpected error",
+                    content: "unexpected",
                     additional:String(error),
                     displayAs:"modal"
                 }
-            });
+            }
+            if(error&&error.type){
+                error_object.message.content = `${error.type}`
+            }
+            ctx.body = JSON.stringify(error_object);
             ctx.status = error.status || 500
             logger.error('%s %s - %s', ctx.method,ctx.originalUrl, error.stack || error)
         }
